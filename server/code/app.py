@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, render_template, make_response
 from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
 from security import authenicate, identity
@@ -10,6 +10,11 @@ api = Api(app)
 jwt = JWT(app, authenicate, identity) #/auth default api call for authenication for JWT
 
 items = []
+
+class Home(Resource):
+    def get(self):
+        headers = {'Content-type': 'text/html'}
+        return make_response(render_template('index.html'), 200, headers)
 
 class Item(Resource):
 
@@ -60,5 +65,6 @@ class ItemList(Resource):
 
 api.add_resource(Item, '/item/<string:name>')
 api.add_resource(ItemList, '/items')
+api.add_resource(Home, '/')
 
 app.run(host='0.0.0.0', port=5000, debug=True)

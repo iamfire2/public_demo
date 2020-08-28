@@ -1,48 +1,41 @@
 {
-  "name": "WebPack",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "webpack-dev-server --config=config/webpack.dev.js",
-    "build": "webpack --config=config/webpack.dev.js",
-    "dev": "nodemon --inspect --watch config --watch src/server src/server/main.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://gitlab.com/iamfire2/webpack.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://gitlab.com/iamfire2/webpack/issues"
-  },
-  "homepage": "https://gitlab.com/iamfire2/webpack#readme",
+  "name": "demo",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-plugin-async-to-promises": "^1.0.5",
-    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
-    "css-loader": "^3.2.0",
-    "express": "^4.17.1",
-    "extract-loader": "^3.1.0",
-    "file-loader": "^4.2.0",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
-    "style-loader": "^1.0.0",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-middleware": "^3.7.2",
-    "webpack-dev-server": "^3.9.0",
-    "webpack-hot-middleware": "^2.25.0"
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.20.0",
+    "lodash": "^4.17.20",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "redux": "^4.0.5",
+    "redux-form": "^8.3.6",
+    "redux-thunk": "^2.3.0"
   },
-  "devDependencies": {
-    "mini-css-extract-plugin": "^0.8.0"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
