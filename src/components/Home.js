@@ -1,20 +1,13 @@
 import React, { useState } from "react";
-import { Button, Grid, TextField, Paper, Typography } from "@material-ui/core";
+import { Button, Grid, Paper, TextField } from "@material-ui/core";
+import { connect } from "react-redux";
 
-import GoogleAuth from "./GoogleAuth";
+import { signOut } from "../actions";
 import { testUrl } from "../api/api";
 
-function Home() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const login = (e) => {
-    e.preventDefault();
-    testUrl()
-      .post("/auth", { username, password })
-      .catch((e) => console.log(e))
-      .then((res) => console.log(res.data.access_token));
-  };
+function Home(props) {
+  const [itemName, setItemName] = useState("");
+  const [price, setPrice] = useState("");
 
   return (
     <Grid
@@ -31,42 +24,108 @@ function Home() {
       }}
     >
       <Paper elevation={3} style={{ padding: "2rem" }}>
-        <Typography variant="h6">Sign in</Typography>
-        <form onSubmit={login}>
-          <Grid item lg={12}>
+        <Grid item lg={12}>
+          Home Page
+        </Grid>
+        <br />
+        <Grid item lg>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={async () => {
+              await testUrl()
+                .get("/todos")
+                .catch((e) => {
+                  console.log(e);
+                  return e;
+                })
+                .then((response) => {
+                  console.log(response.data);
+                  return response;
+                });
+            }}
+          >
+            Get Outside API ToDos
+          </Button>
+        </Grid>
+        <br />
+        <Grid item lg>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={async () => {
+              await testUrl()
+                .get("/items")
+                .catch((e) => {
+                  console.log(e);
+                  return e;
+                })
+                .then((response) => {
+                  console.log(response.data);
+                  return response;
+                });
+            }}
+          >
+            Get Flask API Items
+          </Button>
+        </Grid>
+        <br />
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log(itemName, price);
+          }}
+        >
+          <Grid item lg>
             <TextField
               required
-              id="standard-required"
-              label="Username"
-              defaultValue={username}
+              id="outlined-required"
+              label="Item Name"
+              variant="outlined"
               onChange={(e) => {
-                setUsername(e.target.value);
+                setItemName(e.target.value);
               }}
             />
           </Grid>
-          <Grid item lg={12}>
+          <br />
+          <Grid item lg>
             <TextField
-              id="standard-password-input"
-              label="Password"
-              type="password"
-              autoComplete="current-password"
               required
-              defaultValue={password}
+              id="outlined-required"
+              label="Price"
+              variant="outlined"
               onChange={(e) => {
-                setPassword(e.target.value);
+                setPrice(e.target.value);
               }}
             />
           </Grid>
-          <Grid item lg={12} style={{ marginTop: "2rem" }}>
-            <Button variant="contained" color="primary" fullWidth type="submit">
-              Login
+          <br />
+          <Grid item lg>
+            <Button variant="contained" color="primary" type="submit">
+              Create Flask API Item
             </Button>
           </Grid>
         </form>
-        <GoogleAuth style={{ marginTop: "1rem", width: "100%" }} />
+        <br />
+        <Grid item lg>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              const { sessionStorage } = window;
+
+              sessionStorage.removeItem("token");
+              props.signOut();
+              window.location.reload();
+            }}
+          >
+            Logout
+          </Button>
+        </Grid>
       </Paper>
     </Grid>
   );
 }
 
-export default Home;
+export default connect(null, { signOut })(Home);
