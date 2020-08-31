@@ -6,6 +6,7 @@ import GoogleAuth from "./GoogleAuth";
 
 import { testUrl } from "../api/api";
 import { signIn } from "../actions";
+import history from "../history";
 
 function Home(props) {
   const [username, setUsername] = useState("");
@@ -19,6 +20,7 @@ function Home(props) {
       .post("/auth", { username, password })
       .catch((e) => console.log(e))
       .then((res) => {
+        history.push("/");
         sessionStorage.setItem("token", res.data.access_token);
         props.signIn();
         window.location.reload();

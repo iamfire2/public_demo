@@ -2,12 +2,21 @@ import React, { useState } from "react";
 import { Button, Grid, Paper, TextField } from "@material-ui/core";
 import { connect } from "react-redux";
 
+import TodoDialog from "./diaglogs/TodoDialog";
+import FlaskItemListDialog from "./diaglogs/FlaskItemListDialog";
+import FlaskItemAddDialog from "./diaglogs/FlaskItemAddDialog";
+
 import { signOut } from "../actions";
 import { testUrl } from "../api/api";
 
 function Home(props) {
   const [itemName, setItemName] = useState("");
   const [price, setPrice] = useState("");
+  const [todoList, setTodoList] = useState([]);
+  const [todoDialogState, setTodoDialogState] = useState(false);
+  const [itemList, setItemList] = useState([]);
+  const [flaskItemListState, setFlaskItemListState] = useState(false);
+  const [flaskItemAddedState, setFlaskItemAddedState] = useState(false);
 
   return (
     <Grid
@@ -36,11 +45,11 @@ function Home(props) {
               await testUrl()
                 .get("/todos")
                 .catch((e) => {
-                  console.log(e);
-                  return e;
+                  return Promise.reject(e);
                 })
                 .then((response) => {
-                  console.log(response.data);
+                  setTodoList(response.data);
+                  setTodoDialogState(true);
                   return response;
                 });
             }}
@@ -57,11 +66,11 @@ function Home(props) {
               await testUrl()
                 .get("/items")
                 .catch((e) => {
-                  console.log(e);
-                  return e;
+                  return Promise.reject(e);
                 })
                 .then((response) => {
-                  console.log(response.data);
+                  setItemList(response.data.items);
+                  setFlaskItemListState(true);
                   return response;
                 });
             }}
@@ -72,9 +81,21 @@ function Home(props) {
         <br />
 
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            console.log(itemName, price);
+            const response = await testUrl()
+              .post(`/item/${itemName}`, { price })
+              .catch((e) => {
+                console.log(e.response);
+                return e;
+              })
+              .then((res) => {
+                return res;
+              });
+            if (response.status === 201) {
+              setItemList([response.data]);
+              setFlaskItemAddedState(true);
+            }
           }}
         >
           <Grid item lg>
@@ -124,6 +145,27 @@ function Home(props) {
           </Button>
         </Grid>
       </Paper>
+      {todoList.length && todoDialogState > 0 ? (
+        <TodoDialog
+          todoList={todoList}
+          state={todoDialogState}
+          setState={setTodoDialogState}
+        />
+      ) : null}
+      {flaskItemListState ? (
+        <FlaskItemListDialog
+          itemList={itemList}
+          state={flaskItemListState}
+          setState={setFlaskItemListState}
+        />
+      ) : null}
+      {flaskItemAddedState ? (
+        <FlaskItemAddDialog
+          itemList={itemList}
+          state={flaskItemAddedState}
+          setState={setFlaskItemAddedState}
+        />
+      ) : null}
     </Grid>
   );
 }
